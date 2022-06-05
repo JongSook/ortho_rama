@@ -1,6 +1,4 @@
 %% get c3d file
-tic
-
 clc
 clear
 close all
@@ -11,10 +9,7 @@ invoke(data_c3d);
 % methodsview(data_c3d)
 openc3d(data_c3d)
 
-% open_time = toc;
 %% get data
-% tic
-
 count = data_c3d.GetVideoFrame(1);
 number_3dpoint = data_c3d.GetNumber3DPoints;
 data_x = zeros(count,number_3dpoint);
@@ -30,10 +25,7 @@ for i = 1:count
     end
 end
 
-% data_time = toc;
 %% plot c3d and get angle
-% tic
-
 elbow = zeros(count,1); %% c7-r.head
 knee = zeros(count,1); %% c7-r.head
 
@@ -98,10 +90,7 @@ elbowr_max = max(elbowr);
 elbowl_min = min(elbowl);
 elbowl_max = max(elbowl);
 
-% plot_time = toc;
 %% read file name
-% tic
-
 filePattern = fullfile('./', '*.c3d');
 files = dir(filePattern);
 
@@ -111,10 +100,7 @@ for i=1:length(files)
     %stlread(filename); %you can try this out by uncommenting
 end
 
-% read_time = toc;
 %% save output data
-% tic
-
 filerun = filesname(3).name;
 % filename = 'neck_test_Nong P 0 degree 19-20 min test05.xlsx';
 filename =  convertStringsToChars(convertCharsToStrings(erase(filerun, ".c3d")) + '.xlsx');
@@ -150,5 +136,3 @@ writematrix('Min Elb/R', filename, 'Sheet', sheetname, 'Range', 'E4')
 writematrix('Min Elb/L', filename, 'Sheet', sheetname, 'Range', 'F4')
 writematrix(elbowr_min, filename, 'Sheet', sheetname, 'Range', 'E5')
 writematrix(elbowl_min, filename, 'Sheet', sheetname, 'Range', 'F5')
-
-operate_time = toc;
