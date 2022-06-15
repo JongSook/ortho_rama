@@ -1,4 +1,4 @@
-function ang_deg = angle_degree3p(point1, point2, point_innitial)
+function ang_deg = ra_angleangle_degree3p(point1, point2, point_innitial)
 
     AB = point1 - point_innitial;
     CD = point2 - point_innitial;
