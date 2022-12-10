@@ -108,13 +108,13 @@ df_deg7 = pd.DataFrame()
 df_deg8 = pd.DataFrame()
 df_deg9 = pd.DataFrame()
 
-for i in range(9):
+for i in range(17):
     # print('frame {}: point {}, analog {}'.format(i, reader.point_labels[i], reader.point_labels[1]))
     df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i + 1], columns = ['Point Labels'])
     df_labels = df_labels.append(df_labels_loop)
 
 for i, points, analog in reader.read_frames():
-    for f in range(9):
+    for f in range(17):
         # print('frame {}: point {}, analog {}'.format(points[f,0], points[f,1], points[f,2]))
         # print('frame {}: point {}, analog {}'.format(i, points.shape, analog.shape))
         # print('frame {}: point {}'.format(i, points.all))
