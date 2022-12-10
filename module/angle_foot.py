@@ -136,7 +136,7 @@ df_deg22 = pd.DataFrame()
 
 for i in range(22):
     # print('frame {}: point {}, analog {}'.format(i, reader.point_labels[i], reader.point_labels[1]))
-    df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i], columns = ['Point Labels'])
+    df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i + 1], columns = ['Point Labels'])
     df_labels = df_labels.append(df_labels_loop)
 
 for i, points, analog in reader.read_frames():

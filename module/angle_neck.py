@@ -7,7 +7,7 @@ import math
 
 # path_select = input('File name: ')
 # path = 'D:/Document/Mahidol University/OrthoRama/Python/' + path_select + '.c3d'
-path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Neck P khaew flexion1.c3d'
+path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Neck P khaew right rotate1.c3d'
 reader = c3d.Reader(open(path, 'rb'))
 
 def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
@@ -26,11 +26,11 @@ def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
 def angle_of_unit_vectors(u1, u2, u3, xyz):
     a = np.array([u1, u2, u3])
 
-    if xyz == 'x':
+    if xyz == 'x': # flexion/extension
         b = np.array([1, 0, 0])
-    elif xyz == 'y':
+    elif xyz == 'y': # rotation
         b = np.array([0, 1, 0])
-    elif xyz == 'z':
+    elif xyz == 'z': # right/left
         b = np.array([0, 0, 1])
     else:
         # pass
@@ -43,12 +43,12 @@ def angle_of_unit_vectors(u1, u2, u3, xyz):
     rad = np.arccos(np.clip(cos, -1.0, 1.0))
     deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
 
-    if xyz == 'x':
-        deg = 90 - deg
-    elif xyz == 'y':
-        deg = 90 - deg
-    elif xyz == 'z':
-        deg = 180 - deg
+    if xyz == 'x': # flexion/extension
+        deg = deg
+    elif xyz == 'y': # rotation
+        deg = deg
+    elif xyz == 'z': # right/left
+        deg = deg
     else:
         # pass
         print("Hello World")
@@ -58,11 +58,11 @@ def angle_of_unit_vectors(u1, u2, u3, xyz):
 def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
     a = np.array([u1 - v1, u2 - v2, u3 - v3])
 
-    if xyz == 'x':
+    if xyz == 'x': # flexion/extension # deg = 90 - deg
         b = np.array([1, 0, 0])
-    elif xyz == 'y':
+    elif xyz == 'y': # rotation # deg = deg - 90
         b = np.array([0, 1, 0])
-    elif xyz == 'z':
+    elif xyz == 'z': # right/left # deg = deg
         b = np.array([0, 0, 1])
     else:
         # pass
@@ -75,12 +75,12 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
     rad = np.arccos(np.clip(cos, -1.0, 1.0))
     deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
 
-    if xyz == 'x':
+    if xyz == 'x': # flexion/extension # deg = 90 - deg
         deg = 90 - deg
-    elif xyz == 'y':
-        deg = 90 - deg
-    elif xyz == 'z':
-        deg = 180 - deg
+    elif xyz == 'y': # rotation # deg = deg - 90
+        deg = deg - 90
+    elif xyz == 'z': # right/left # deg = deg
+        deg = deg
     else:
         # pass
         print("Hello World")
@@ -88,6 +88,8 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
     return deg
 
 df_labels = pd.DataFrame()
+df_deg_xyz = pd.DataFrame()
+
 df_1 = pd.DataFrame()
 df_2 = pd.DataFrame()
 df_3 = pd.DataFrame()
@@ -112,10 +114,15 @@ df_deg10 = pd.DataFrame()
 
 for i in range(10):
     # print('frame {}: point {}, analog {}'.format(i, reader.point_labels[i], reader.point_labels[1]))
-    df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i], columns = ['Point Labels'])
+    df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i + 1], columns = ['Point Labels'])
     df_labels = df_labels.append(df_labels_loop)
 
 for i, points, analog in reader.read_frames():
+    two_unit_x = angle_of_two_unit_vectors(points[4,0], points[4,1], points[4,2], points[3,0], points[3,1], points[3,2], 'x')
+    two_unit_y = angle_of_two_unit_vectors(points[2,0], points[2,1], points[2,2], points[1,0], points[1,1], points[1,2], 'y')
+    two_unit_z = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'z')
+    df_deg = pd.DataFrame([[two_unit_x, two_unit_y, two_unit_z]], index = [i], columns = ['xX FL/EXT', 'yY ROT', 'zZ L/R'])
+    df_deg_xyz = df_deg_xyz.append(df_deg)
     for f in range(10):
         # print('frame {}: point {}, analog {}'.format(points[f,0], points[f,1], points[f,2]))
         # print('frame {}: point {}, analog {}'.format(i, points.shape, analog.shape))
@@ -125,14 +132,10 @@ for i, points, analog in reader.read_frames():
         if f == 0:
             df_1 = df_1.append(df_labels_loop)
             # test = angle_of_two_vectors(points[f,0], points[f,1], points[f,2], points[f+1,0], points[f+1,1], points[f+1,2])
-            # unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
-            # unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
-            # unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
-            # df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
-            two_unit_x = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'x')
-            two_unit_y = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'y')
-            two_unit_z = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'z')
-            df_deg = pd.DataFrame([[two_unit_x, two_unit_y, two_unit_z]], index = [i], columns = ['xX ' + df_labels.iat[f,0], 'yY ' + df_labels.iat[f,0], 'zZ ' + df_labels.iat[f,0]])
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
             df_deg1 = df_deg1.append(df_deg)
         elif f == 1:
             df_2 = df_2.append(df_labels_loop)
@@ -229,12 +232,15 @@ with pd.ExcelWriter('saved_merge.xlsx') as writer1:
     df_deg9.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 33)
     df_deg10.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 37)
 
+    df_deg_xyz.to_excel(writer1, sheet_name = 'XYZ', index = True)
+
     df_labels.to_excel(writer1, sheet_name = 'Point Labels', index = True)
 
     # workbook  = writer1.book
     # worksheet = writer1.sheets['Point Labels']
     # workbook.set_column(0, 1, 50)
-    writer1.sheets['Point Labels'].set_column(2, 3, 15)
+    writer1.sheets['XYZ'].set_column(1, 3, 15)
+    writer1.sheets['Point Labels'].set_column(1, 1, 15)
 
 # writer1.save()
 # writer1.close()
