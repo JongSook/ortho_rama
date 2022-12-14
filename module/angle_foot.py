@@ -7,7 +7,7 @@ import math
 
 # path_select = input('File name: ')
 # path = 'D:/Document/Mahidol University/OrthoRama/Python/' + path_select + '.c3d'
-path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Neck P khaew flexion1.c3d'
+path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Trimmed_Foot trak no.4 shoesEwalk6a.c3d'
 reader = c3d.Reader(open(path, 'rb'))
 
 def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
@@ -76,11 +76,11 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
     deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
 
     if xyz == 'x':
-        deg = 90 - deg
+        deg = deg
     elif xyz == 'y':
-        deg = 90 - deg
+        deg = deg
     elif xyz == 'z':
-        deg = 180 - deg
+        deg = deg
     else:
         # pass
         print("Hello World")
@@ -88,6 +88,8 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
     return deg
 
 df_labels = pd.DataFrame()
+df_deg_xyz = pd.DataFrame()
+
 df_1 = pd.DataFrame()
 df_2 = pd.DataFrame()
 df_3 = pd.DataFrame()
@@ -221,6 +223,90 @@ for i, points, analog in reader.read_frames():
             unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
             df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
             df_deg10 = df_deg10.append(df_deg)
+        elif f == 10:
+            df_11 = df_11.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg11 = df_deg11.append(df_deg)
+        elif f == 11:
+            df_12 = df_12.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg12 = df_deg12.append(df_deg)
+        elif f == 12:
+            df_13 = df_13.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg13 = df_deg13.append(df_deg)
+        elif f == 13:
+            df_14 = df_14.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg14 = df_deg14.append(df_deg)
+        elif f == 14:
+            df_15 = df_15.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg15 = df_deg15.append(df_deg)
+        elif f == 15:
+            df_16 = df_16.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg16 = df_deg16.append(df_deg)
+        elif f == 16:
+            df_17 = df_17.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg17 = df_deg17.append(df_deg)
+        elif f == 17:
+            df_18 = df_18.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg18 = df_deg18.append(df_deg)
+        elif f == 18:
+            df_19 = df_19.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg19 = df_deg19.append(df_deg)
+        elif f == 19:
+            df_20 = df_20.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg20 = df_deg20.append(df_deg)
+        elif f == 20:
+            df_21 = df_21.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg21 = df_deg21.append(df_deg)
+        elif f == 21:
+            df_22 = df_22.append(df_labels_loop)
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
+            df_deg22 = df_deg22.append(df_deg)
         else:
             # pass
             print("Hello World")
