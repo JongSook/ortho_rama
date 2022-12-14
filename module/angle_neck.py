@@ -112,7 +112,7 @@ df_deg8 = pd.DataFrame()
 df_deg9 = pd.DataFrame()
 df_deg10 = pd.DataFrame()
 
-for i in range(10):
+for i in range(reader.point_labels.size):
     # print('frame {}: point {}, analog {}'.format(i, reader.point_labels[i], reader.point_labels[1]))
     df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i + 1], columns = ['Point Labels'])
     df_labels = df_labels.append(df_labels_loop)
@@ -123,7 +123,7 @@ for i, points, analog in reader.read_frames():
     two_unit_z = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'z')
     df_deg = pd.DataFrame([[two_unit_x, two_unit_y, two_unit_z]], index = [i], columns = ['xX FL/EXT', 'yY ROT', 'zZ L/R'])
     df_deg_xyz = df_deg_xyz.append(df_deg)
-    for f in range(10):
+    for f in range(reader.point_labels.size):
         # print('frame {}: point {}, analog {}'.format(points[f,0], points[f,1], points[f,2]))
         # print('frame {}: point {}, analog {}'.format(i, points.shape, analog.shape))
         # print('frame {}: point {}'.format(i, points.all))
@@ -241,6 +241,40 @@ with pd.ExcelWriter('saved_merge.xlsx') as writer1:
     # workbook.set_column(0, 1, 50)
     writer1.sheets['XYZ'].set_column(1, 3, 15)
     writer1.sheets['Point Labels'].set_column(1, 1, 15)
+
+    workbook  = writer1.book
+    worksheet = writer1.sheets['XYZ']
+    (max_row, max_col) = df_deg_xyz.shape
+
+    chart_x = workbook.add_chart({'type': 'line'})
+    chart_x.add_series({'values': ['XYZ', 1, 1, max_row, 1], 'line': {'color': '#0000FF', 'width': 1.2}})
+    chart_x.set_title({'name': 'Flexion/Extension', 'name_font': {'name': 'Time New Roman', 'bold': True, 'size': 14, 'color': 'black'}})
+    chart_x.set_x_axis({'name': 'Motion Points (Samples)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'visible': False})
+    chart_x.set_y_axis({'name': 'Angles in Degree (°)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'major_gridlines': {'visible': False}})
+    chart_x.set_legend({'position': 'none'})
+    chart_x.set_size({'width': 360, 'height': 216})
+    chart_x.set_plotarea({'layout': {'x': 0.13, 'y': 0.1, 'width': 0.82, 'height': 0.8}})
+    worksheet.insert_chart('F2', chart_x)
+
+    chart_y = workbook.add_chart({'type': 'line'})
+    chart_y.add_series({'values': ['XYZ', 1, 2, max_row, 2], 'line': {'color': '#0000FF', 'width': 1.2}})
+    chart_y.set_title({'name': 'Left/Right', 'name_font': {'name': 'Time New Roman', 'bold': True, 'size': 14, 'color': 'black'}})
+    chart_y.set_x_axis({'name': 'Motion Points (Samples)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'visible': False})
+    chart_y.set_y_axis({'name': 'Angles in Degree (°)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'major_gridlines': {'visible': False}})
+    chart_y.set_legend({'position': 'none'})
+    chart_y.set_size({'width': 360, 'height': 216})
+    chart_y.set_plotarea({'layout': {'x': 0.13, 'y': 0.1, 'width': 0.82, 'height': 0.8}})
+    worksheet.insert_chart('F14', chart_y)
+
+    chart_z = workbook.add_chart({'type': 'line'})
+    chart_z.add_series({'values': ['XYZ', 1, 3, max_row, 3], 'line': {'color': '#0000FF', 'width': 1.2}})
+    chart_z.set_title({'name': 'Rotation', 'name_font': {'name': 'Time New Roman', 'bold': True, 'size': 14, 'color': 'black'}})
+    chart_z.set_x_axis({'name': 'Motion Points (Samples)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'visible': False})
+    chart_z.set_y_axis({'name': 'Angles in Degree (°)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'major_gridlines': {'visible': False}})
+    chart_z.set_legend({'position': 'none'})
+    chart_z.set_size({'width': 360, 'height': 216})
+    chart_z.set_plotarea({'layout': {'x': 0.13, 'y': 0.1, 'width': 0.82, 'height': 0.8}})
+    worksheet.insert_chart('L2', chart_z)
 
 # writer1.save()
 # writer1.close()

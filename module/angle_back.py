@@ -124,13 +124,13 @@ df_deg12 = pd.DataFrame()
 df_deg13 = pd.DataFrame()
 df_deg14 = pd.DataFrame()
 
-for i in range(14):
+for i in range(reader.point_labels.size):
     # print('frame {}: point {}, analog {}'.format(i, reader.point_labels[i], reader.point_labels[1]))
     df_labels_loop = pd.DataFrame([reader.point_labels[i]], index = [i + 1], columns = ['Point Labels'])
     df_labels = df_labels.append(df_labels_loop)
 
 for i, points, analog in reader.read_frames():
-    for f in range(14):
+    for f in range(reader.point_labels.size):
         # print('frame {}: point {}, analog {}'.format(points[f,0], points[f,1], points[f,2]))
         # print('frame {}: point {}, analog {}'.format(i, points.shape, analog.shape))
         # print('frame {}: point {}'.format(i, points.all))
@@ -248,7 +248,7 @@ for i, points, analog in reader.read_frames():
 # print(unit_x)
 # print(type(unit_x))
 
-with pd.ExcelWriter('saved_merge.xlsx') as writer1:
+with pd.ExcelWriter('saved_merge.xlsx', engine='xlsxwriter') as writer1:
     df_1.to_excel(writer1, sheet_name = 'Raw Data', index = True)
     df_2.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol = 5)
     df_3.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol = 9)
