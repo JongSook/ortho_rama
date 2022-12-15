@@ -26,46 +26,11 @@ def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
 def angle_of_unit_vectors(u1, u2, u3, xyz):
     a = np.array([u1, u2, u3])
 
-    if xyz == 'x': # flexion/extension
+    if xyz == 'x':
         b = np.array([1, 0, 0])
-    elif xyz == 'y': # rotation
+    elif xyz == 'y':
         b = np.array([0, 1, 0])
-    elif xyz == 'z': # right/left
-        b = np.array([0, 0, 1])
-    else:
-        # pass
-        print("Hello World")
-        
-    inner = np.inner(a, b)
-    norms = LA.norm(a) * LA.norm(b)
-
-    if (u1 == 0 and u2 == 0) or (u1 == 0 and u3 == 0) or (u2 == 0 and u3 == 0) or (u1 == 0 and u2 == 0 and u3 == 0):
-        deg = 'NA'
-    else:
-        cos = inner / norms
-        rad = np.arccos(np.clip(cos, -1.0, 1.0))
-        deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
-
-        if xyz == 'x': # flexion/extension
-            deg = deg
-        elif xyz == 'y': # rotation
-            deg = deg
-        elif xyz == 'z': # right/left
-            deg = deg
-        else:
-            # pass
-            print("Hello World")
-
-    return deg
-
-def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
-    a = np.array([u1 - v1, u2 - v2, u3 - v3])
-
-    if xyz == 'x': # flexion/extension
-        b = np.array([1, 0, 0])
-    elif xyz == 'y': # rotation
-        b = np.array([0, 1, 0])
-    elif xyz == 'z': # right/left
+    elif xyz == 'z':
         b = np.array([0, 0, 1])
     else:
         # pass
@@ -81,12 +46,48 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
         rad = np.arccos(np.clip(cos, -1.0, 1.0))
         deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
 
-        if xyz == 'x': # flexion/extension
-            deg = 90 - deg
-        elif xyz == 'y': # rotation
-            deg = 90 - deg
-        elif xyz == 'z': # right/left
-            deg = 180 - deg
+        if xyz == 'x':
+            deg = deg
+        elif xyz == 'y':
+            deg = deg
+        elif xyz == 'z':
+            deg = deg
+        else:
+            # pass
+            print("Hello World")
+
+    return deg
+
+def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
+    a = np.array([u1 - v1, u2 - v2, u3 - v3])
+
+    if xyz == 'x':
+        b = np.array([1, 0, 0])
+    elif xyz == 'y':
+        b = np.array([0, 1, 0])
+    elif xyz == 'z':
+        b = np.array([0, 0, 1])
+    else:
+        # pass
+        print("Hello World")
+
+    if (u1 == 0 and u2 == 0) or (u1 == 0 and u3 == 0) or (u2 == 0 and u3 == 0) or (u1 == 0 and u2 == 0 and u3 == 0) or \
+        (v1 == 0 and v2 == 0) or (v1 == 0 and v3 == 0) or (v2 == 0 and v3 == 0) or (v1 == 0 and v2 == 0 and v3 == 0):
+        deg = 'NA'
+    else:
+        inner = np.inner(a, b)
+        norms = LA.norm(a) * LA.norm(b)
+
+        cos = inner / norms
+        rad = np.arccos(np.clip(cos, -1.0, 1.0))
+        deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
+
+        if xyz == 'x':
+            deg = deg
+        elif xyz == 'y':
+            deg = deg
+        elif xyz == 'z':
+            deg = deg
         else:
             # pass
             print("Hello World")
@@ -94,6 +95,8 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
     return deg
 
 df_labels = pd.DataFrame()
+df_deg_xyz = pd.DataFrame()
+
 df_1 = pd.DataFrame()
 df_2 = pd.DataFrame()
 df_3 = pd.DataFrame()
@@ -143,10 +146,6 @@ for i, points, analog in reader.read_frames():
             unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
             unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
             df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
-            # two_unit_x = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'x')
-            # two_unit_y = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'y')
-            # two_unit_z = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'z')
-            # df_deg = pd.DataFrame([[two_unit_x, two_unit_y, two_unit_z]], index = [i], columns = ['xX ' + df_labels.iat[f,0], 'yY ' + df_labels.iat[f,0], 'zZ ' + df_labels.iat[f,0]])
             df_deg1 = df_deg1.append(df_deg)
         elif f == 1:
             df_2 = df_2.append(df_labels_loop)

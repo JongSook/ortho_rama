@@ -35,23 +35,26 @@ def angle_of_unit_vectors(u1, u2, u3, xyz):
     else:
         # pass
         print("Hello World")
-        
-    inner = np.inner(a, b)
-    norms = LA.norm(a) * LA.norm(b)
 
-    cos = inner / norms
-    rad = np.arccos(np.clip(cos, -1.0, 1.0))
-    deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
-
-    if xyz == 'x':
-        deg = 90 - deg
-    elif xyz == 'y':
-        deg = 90 - deg
-    elif xyz == 'z':
-        deg = 180 - deg
+    if (u1 == 0 and u2 == 0) or (u1 == 0 and u3 == 0) or (u2 == 0 and u3 == 0) or (u1 == 0 and u2 == 0 and u3 == 0):
+        deg = 'NA'
     else:
-        # pass
-        print("Hello World")
+        inner = np.inner(a, b)
+        norms = LA.norm(a) * LA.norm(b)
+
+        cos = inner / norms
+        rad = np.arccos(np.clip(cos, -1.0, 1.0))
+        deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
+
+        if xyz == 'x':
+            deg = deg
+        elif xyz == 'y':
+            deg = deg
+        elif xyz == 'z':
+            deg = deg
+        else:
+            # pass
+            print("Hello World")
 
     return deg
 
@@ -68,22 +71,26 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
         # pass
         print("Hello World")
 
-    inner = np.inner(a, b)
-    norms = LA.norm(a) * LA.norm(b)
-
-    cos = inner / norms
-    rad = np.arccos(np.clip(cos, -1.0, 1.0))
-    deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
-
-    if xyz == 'x':
-        deg = deg
-    elif xyz == 'y':
-        deg = deg
-    elif xyz == 'z':
-        deg = deg
+    if (u1 == 0 and u2 == 0) or (u1 == 0 and u3 == 0) or (u2 == 0 and u3 == 0) or (u1 == 0 and u2 == 0 and u3 == 0) or \
+        (v1 == 0 and v2 == 0) or (v1 == 0 and v3 == 0) or (v2 == 0 and v3 == 0) or (v1 == 0 and v2 == 0 and v3 == 0):
+        deg = 'NA'
     else:
-        # pass
-        print("Hello World")
+        inner = np.inner(a, b)
+        norms = LA.norm(a) * LA.norm(b)
+
+        cos = inner / norms
+        rad = np.arccos(np.clip(cos, -1.0, 1.0))
+        deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
+
+        if xyz == 'x':
+            deg = deg
+        elif xyz == 'y':
+            deg = deg
+        elif xyz == 'z':
+            deg = deg
+        else:
+            # pass
+            print("Hello World")
 
     return deg
 
@@ -151,14 +158,10 @@ for i, points, analog in reader.read_frames():
         if f == 0:
             df_1 = df_1.append(df_labels_loop)
             # test = angle_of_two_vectors(points[f,0], points[f,1], points[f,2], points[f+1,0], points[f+1,1], points[f+1,2])
-            # unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
-            # unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
-            # unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
-            # df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
-            two_unit_x = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'x')
-            two_unit_y = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'y')
-            two_unit_z = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'z')
-            df_deg = pd.DataFrame([[two_unit_x, two_unit_y, two_unit_z]], index = [i], columns = ['xX ' + df_labels.iat[f,0], 'yY ' + df_labels.iat[f,0], 'zZ ' + df_labels.iat[f,0]])
+            unit_x = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'x')
+            unit_y = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'y')
+            unit_z = angle_of_unit_vectors(points[f,0], points[f,1], points[f,2], 'z')
+            df_deg = pd.DataFrame([[unit_x, unit_y, unit_z]], index = [i], columns = ['X ' + df_labels.iat[f,0], 'Y ' + df_labels.iat[f,0], 'Z ' + df_labels.iat[f,0]])
             df_deg1 = df_deg1.append(df_deg)
         elif f == 1:
             df_2 = df_2.append(df_labels_loop)
@@ -350,18 +353,18 @@ with pd.ExcelWriter('saved_merge.xlsx', engine='xlsxwriter') as writer1:
     df_deg8.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 29)
     df_deg9.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 33)
     df_deg10.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 37)
-    df_deg11.to_excel(writer1, sheet_name = 'Unit Angle', index = False)
-    df_deg12.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 5)
-    df_deg13.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 9)
-    df_deg14.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 13)
-    df_deg15.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 17)
-    df_deg16.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 21)
-    df_deg17.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 25)
-    df_deg18.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 29)
-    df_deg19.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 33)
-    df_deg20.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 37)
-    df_deg21.to_excel(writer1, sheet_name = 'Unit Angle', index = False)
-    df_deg22.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 5)
+    df_deg11.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol = 41)
+    df_deg12.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 45)
+    df_deg13.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 49)
+    df_deg14.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 53)
+    df_deg15.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 57)
+    df_deg16.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 61)
+    df_deg17.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 65)
+    df_deg18.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 69)
+    df_deg19.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 73)
+    df_deg20.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol= 77)
+    df_deg21.to_excel(writer1, sheet_name = 'Unit Angle', index = None, startcol = 81)
+    df_deg22.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 85)
 
     df_labels.to_excel(writer1, sheet_name = 'Point Labels', index = True)
 

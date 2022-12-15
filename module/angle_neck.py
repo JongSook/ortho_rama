@@ -36,22 +36,25 @@ def angle_of_unit_vectors(u1, u2, u3, xyz):
         # pass
         print("Hello World")
         
-    inner = np.inner(a, b)
-    norms = LA.norm(a) * LA.norm(b)
-
-    cos = inner / norms
-    rad = np.arccos(np.clip(cos, -1.0, 1.0))
-    deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
-
-    if xyz == 'x': # flexion/extension
-        deg = deg
-    elif xyz == 'y': # rotation
-        deg = deg
-    elif xyz == 'z': # right/left
-        deg = deg
+    if (u1 == 0 and u2 == 0) or (u1 == 0 and u3 == 0) or (u2 == 0 and u3 == 0) or (u1 == 0 and u2 == 0 and u3 == 0):
+        deg = 'NA'
     else:
-        # pass
-        print("Hello World")
+        inner = np.inner(a, b)
+        norms = LA.norm(a) * LA.norm(b)
+
+        cos = inner / norms
+        rad = np.arccos(np.clip(cos, -1.0, 1.0))
+        deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
+
+        if xyz == 'x': # flexion/extension
+            deg = deg
+        elif xyz == 'y': # rotation
+            deg = deg
+        elif xyz == 'z': # right/left
+            deg = deg
+        else:
+            # pass
+            print("Hello World")
 
     return deg
 
@@ -68,22 +71,26 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
         # pass
         print("Hello World")
 
-    inner = np.inner(a, b)
-    norms = LA.norm(a) * LA.norm(b)
-
-    cos = inner / norms
-    rad = np.arccos(np.clip(cos, -1.0, 1.0))
-    deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
-
-    if xyz == 'x': # flexion/extension # deg = 90 - deg
-        deg = 90 - deg
-    elif xyz == 'y': # rotation # deg = deg - 90
-        deg = deg - 90
-    elif xyz == 'z': # right/left # deg = deg
-        deg = deg
+    if (u1 == 0 and u2 == 0) or (u1 == 0 and u3 == 0) or (u2 == 0 and u3 == 0) or (u1 == 0 and u2 == 0 and u3 == 0) or \
+        (v1 == 0 and v2 == 0) or (v1 == 0 and v3 == 0) or (v2 == 0 and v3 == 0) or (v1 == 0 and v2 == 0 and v3 == 0):
+        deg = 'NA'
     else:
-        # pass
-        print("Hello World")
+        inner = np.inner(a, b)
+        norms = LA.norm(a) * LA.norm(b)
+
+        cos = inner / norms
+        rad = np.arccos(np.clip(cos, -1.0, 1.0))
+        deg = np.rad2deg(np.clip(rad, -2.0 * math.pi, 2.0 * math.pi))
+
+        if xyz == 'x': # flexion/extension # deg = 90 - deg
+            deg = 90 - deg
+        elif xyz == 'y': # rotation # deg = deg - 90
+            deg = deg - 90
+        elif xyz == 'z': # right/left # deg = deg
+            deg = deg
+        else:
+            # pass
+            print("Hello World")
 
     return deg
 
