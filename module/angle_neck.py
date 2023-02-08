@@ -10,6 +10,10 @@ import math
 path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Neck P khaew right rotate1.c3d'
 reader = c3d.Reader(open(path, 'rb'))
 
+# save_file = 'saved_merge1.xlsx'
+save = path.replace('D:\Document\Mahidol University\OrthoRama\Python\sample01\\', '')
+save_file = save.replace('.c3d', '') + '.xlsx'
+
 def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
     a = np.array([u1, u2, u3])  # ([1, 2])
     b = np.array([v1, v2, v3])  # [-5, 4]
@@ -216,7 +220,7 @@ for i, points, analog in reader.read_frames():
 # print(unit_x)
 # print(type(unit_x))
 
-with pd.ExcelWriter('saved_merge.xlsx') as writer1:
+with pd.ExcelWriter(save_file) as writer1:
     df_1.to_excel(writer1, sheet_name = 'Raw Data', index = True)
     df_2.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol= 5)
     df_3.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol= 9)
