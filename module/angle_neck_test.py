@@ -21,11 +21,12 @@ import math
 # save = path.replace('D:\Document\Mahidol University\OrthoRama\Python\sample01\\', '')
 # save_file = save.replace('.c3d', '') + '.xlsx'
 
-file_name = 'Neck P khaew right rotate1' + '.c3d'
-file_open = 'D:\\Document\\Mahidol University\\OrthoRama\\Python\\sample01'
-file_save = 'D:\\Document\\Mahidol University\\OrthoRama\\Python'
-path_open = file_open + '\\' + file_name
-path_save = file_save + '\\' + file_name.replace('.c3d', '') + '.xlsx'
+file_name = 'Fon neck extension neww1'
+file_open = 'G:\\Document\\Ramathibodi Orthopaedics\\Data module\\Neck'
+file_save = 'G:\\Document\\Ramathibodi Orthopaedics\\Python'
+file_c3d = file_name + '.c3d'
+path_open = file_open + '\\' + file_c3d
+path_save = file_save + '\\' + file_c3d.replace('.c3d', '') + '.xlsx'
 reader = c3d.Reader(open(path_open, 'rb'))
 
 #########################
@@ -121,6 +122,7 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
 df_labels = pd.DataFrame()
 df_deg_xyz = pd.DataFrame()
 df_time = pd.DataFrame()
+df_value = pd.DataFrame()
 
 df_1 = pd.DataFrame()
 df_2 = pd.DataFrame()
@@ -154,7 +156,7 @@ for i, points, analog in reader.read_frames():
     two_unit_x = angle_of_two_unit_vectors(points[4,0], points[4,1], points[4,2], points[3,0], points[3,1], points[3,2], 'x')
     two_unit_y = angle_of_two_unit_vectors(points[2,0], points[2,1], points[2,2], points[1,0], points[1,1], points[1,2], 'y')
     two_unit_z = angle_of_two_unit_vectors(points[3,0], points[3,1], points[3,2], points[4,0], points[4,1], points[4,2], 'z')
-    df_deg = pd.DataFrame([[two_unit_x, two_unit_y, two_unit_z, time]], index = [i], columns = ['xX FL/EXT', 'yY ROT', 'zZ L/R', 'Time'])
+    df_deg = pd.DataFrame([[time, two_unit_x, two_unit_y, two_unit_z]], index = [i], columns = ['Time', 'xX FL/EXT', 'yY ROT', 'zZ L/R'])
     df_deg_xyz = df_deg_xyz.append(df_deg)
     for f in range(reader.point_labels.size):
         # print('frame {}: point {}, analog {}'.format(points[f,0], points[f,1], points[f,2]))
@@ -238,6 +240,8 @@ for i, points, analog in reader.read_frames():
             print("Hello World")
             break
 
+df_value = df_deg_xyz[['xX FL/EXT', 'yY ROT', 'zZ L/R']].agg(['min','max'])
+
 # print(df_labels.iat[0,0])
 # print(unit_x)
 # print(type(unit_x))
@@ -247,6 +251,9 @@ for i, points, analog in reader.read_frames():
 ###########################
 # with pd.ExcelWriter('D:\\Document\\Mahidol University\\OrthoRama\\Python\\sample01\\Neck P khaew right rotate1.xlsx') as writer1:
 with pd.ExcelWriter(path_save) as writer1:
+    df_deg_xyz.to_excel(writer1, sheet_name = 'XYZ', index = True)
+    df_value.to_excel(writer1, sheet_name = 'XYZ', index = True, startcol= 6)
+
     df_1.to_excel(writer1, sheet_name = 'Raw Data', index = True)
     df_2.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol= 5)
     df_3.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol= 9)
@@ -269,14 +276,13 @@ with pd.ExcelWriter(path_save) as writer1:
     df_deg9.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 33)
     df_deg10.to_excel(writer1, sheet_name = 'Unit Angle', index = False, startcol= 37)
 
-    df_deg_xyz.to_excel(writer1, sheet_name = 'XYZ', index = True)
-
     df_labels.to_excel(writer1, sheet_name = 'Point Labels', index = True)
 
     # workbook  = writer1.book
     # worksheet = writer1.sheets['Point Labels']
     # workbook.set_column(0, 1, 50)
-    writer1.sheets['XYZ'].set_column(1, 3, 15)
+    writer1.sheets['XYZ'].set_column(2, 4, 15)
+    writer1.sheets['XYZ'].set_column(7, 9, 15)
     writer1.sheets['Point Labels'].set_column(1, 1, 15)
 
     workbook  = writer1.book
@@ -284,34 +290,34 @@ with pd.ExcelWriter(path_save) as writer1:
     (max_row, max_col) = df_deg_xyz.shape
 
     chart_x = workbook.add_chart({'type': 'line'})
-    chart_x.add_series({'categories': ['XYZ', 1, 4, i, 4], 'values': ['XYZ', 1, 1, max_row, 1], 'line': {'color': '#0000FF', 'width': 1.2}})
+    chart_x.add_series({'categories': ['XYZ', 1, 1, i, 1], 'values': ['XYZ', 1, 2, max_row, 2], 'line': {'color': '#0000FF', 'width': 1.2}})
     chart_x.set_title({'name': 'Flexion/Extension', 'name_font': {'name': 'Time New Roman', 'bold': True, 'size': 14, 'color': 'black'}})
-    chart_x.set_x_axis({'name': 'Motion Points (Samples)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'interval_unit': 200, 'label_position': 'low', 'line': {'none': True}})
+    chart_x.set_x_axis({'name': 'Time (Second)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'interval_unit': 200, 'label_position': 'low', 'line': {'none': True}})
     chart_x.set_y_axis({'name': 'Angles in Degree (°)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'major_gridlines': {'visible': False}})
     chart_x.set_legend({'position': 'none'})
     chart_x.set_size({'width': 360, 'height': 216})
-    chart_x.set_plotarea({'layout': {'x': 0.13, 'y': 0.1, 'width': 0.82, 'height': 0.7}})
-    worksheet.insert_chart('G2', chart_x) # , {'x_scale': 1.5, 'y_scale': 1.5}
+    chart_x.set_plotarea({'layout': {'x': 0.15, 'y': 0.1, 'width': 0.8, 'height': 0.7}})
+    worksheet.insert_chart('G5', chart_x) # , {'x_scale': 1.5, 'y_scale': 1.5} # L
 
     chart_y = workbook.add_chart({'type': 'line'})
-    chart_y.add_series({'values': ['XYZ', 1, 2, max_row, 2], 'line': {'color': '#0000FF', 'width': 1.2}})
+    chart_y.add_series({'categories': ['XYZ', 1, 1, i, 1], 'values': ['XYZ', 1, 3, max_row, 3], 'line': {'color': '#0000FF', 'width': 1.2}})
     chart_y.set_title({'name': 'Left/Right', 'name_font': {'name': 'Time New Roman', 'bold': True, 'size': 14, 'color': 'black'}})
-    chart_y.set_x_axis({'name': 'Motion Points (Samples)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'visible': False})
+    chart_y.set_x_axis({'name': 'Time (Second)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'interval_unit': 200, 'label_position': 'low', 'line': {'none': True}})
     chart_y.set_y_axis({'name': 'Angles in Degree (°)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'major_gridlines': {'visible': False}})
     chart_y.set_legend({'position': 'none'})
     chart_y.set_size({'width': 360, 'height': 216})
-    chart_y.set_plotarea({'layout': {'x': 0.13, 'y': 0.1, 'width': 0.82, 'height': 0.8}})
-    worksheet.insert_chart('G14', chart_y)
+    chart_y.set_plotarea({'layout': {'x': 0.15, 'y': 0.1, 'width': 0.8, 'height': 0.7}})
+    worksheet.insert_chart('G17', chart_y)
 
     chart_z = workbook.add_chart({'type': 'line'})
-    chart_z.add_series({'values': ['XYZ', 1, 3, max_row, 3], 'line': {'color': '#0000FF', 'width': 1.2}})
+    chart_z.add_series({'categories': ['XYZ', 1, 1, i, 1], 'values': ['XYZ', 1, 4, max_row, 4], 'line': {'color': '#0000FF', 'width': 1.2}})
     chart_z.set_title({'name': 'Rotation', 'name_font': {'name': 'Time New Roman', 'bold': True, 'size': 14, 'color': 'black'}})
-    chart_z.set_x_axis({'name': 'Motion Points (Samples)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'visible': False})
+    chart_z.set_x_axis({'name': 'Time (Second)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'interval_unit': 200, 'label_position': 'low', 'line': {'none': True}})
     chart_z.set_y_axis({'name': 'Angles in Degree (°)', 'name_font': {'name': 'Time New Roman', 'bold': False, 'size': 10, 'color': 'black'}, 'major_gridlines': {'visible': False}})
     chart_z.set_legend({'position': 'none'})
     chart_z.set_size({'width': 360, 'height': 216})
-    chart_z.set_plotarea({'layout': {'x': 0.13, 'y': 0.1, 'width': 0.82, 'height': 0.8}})
-    worksheet.insert_chart('M2', chart_z)
+    chart_z.set_plotarea({'layout': {'x': 0.15, 'y': 0.1, 'width': 0.8, 'height': 0.7}})
+    worksheet.insert_chart('G29', chart_z)
 
 # writer1.save()
 # writer1.close()
