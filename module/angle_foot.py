@@ -7,7 +7,7 @@ import math
 
 # path_select = input('File name: ')
 # path = 'D:/Document/Mahidol University/OrthoRama/Python/' + path_select + '.c3d'
-path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Trimmed_Foot trak no.4 shoesEwalk6a.c3d'
+path = 'D:\Document\Mahidol University\OrthoRama\Angle\GaitModule\P Khaew test2 data\\KK test2 foot plantar flexion2A.c3d'
 reader = c3d.Reader(open(path, 'rb'))
 
 def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
@@ -319,7 +319,7 @@ for i, points, analog in reader.read_frames():
 # print(unit_x)
 # print(type(unit_x))
 
-with pd.ExcelWriter('saved_merge.xlsx', engine='xlsxwriter') as writer1:
+with pd.ExcelWriter('saved_merge3.xlsx', engine='xlsxwriter') as writer1:
     df_1.to_excel(writer1, sheet_name = 'Raw Data', index = True)
     df_2.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol = 5)
     df_3.to_excel(writer1, sheet_name = 'Raw Data', index = False, startcol = 9)

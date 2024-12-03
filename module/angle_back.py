@@ -1,3 +1,6 @@
+##########################
+##### import librery #####
+##########################
 import c3d
 import pandas as pd
 import numpy as np
@@ -5,11 +8,31 @@ import numpy.linalg as LA
 import math
 # import xlsxwriter
 
+###########################
+##### file management #####
+###########################
 # path_select = input('File name: ')
 # path = 'D:/Document/Mahidol University/OrthoRama/Python/' + path_select + '.c3d'
-path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Motion back flexion2A.c3d'
-reader = c3d.Reader(open(path, 'rb'))
+# path = 'D:\Document\Mahidol University\OrthoRama\Python\sample01\\Neck P khaew right rotate1.c3d'
+# reader = c3d.Reader(open(path, 'rb'))
 
+# save_file = 'saved_merge1.xlsx'
+# save_file = path.replace('D:\Document\Mahidol University\OrthoRama\Python\sample01\\', '').replace('.c3d', '') + '.xlsx'
+# save = path.replace('D:\Document\Mahidol University\OrthoRama\Python\sample01\\', '')
+# save_file = save.replace('.c3d', '') + '.xlsx'
+
+file_name = 'Motion back extend2A'
+file_open = 'D:\\Document\\Mahidol University\\OrthoRama\\Python\\sample01'
+file_save = 'D:\\Document\\Mahidol University\\OrthoRama\\Python'
+
+file_c3d = file_name + '.c3d'
+path_open = file_open + '\\' + file_c3d
+path_save = file_save + '\\' + file_c3d.replace('.c3d', '') + '.xlsx'
+reader = c3d.Reader(open(path_open, 'rb'))
+
+#########################
+##### function part #####
+#########################
 def angle_of_two_vectors(u1, u2, u3, v1, v2, v3):
     a = np.array([u1, u2, u3])  # ([1, 2])
     b = np.array([v1, v2, v3])  # [-5, 4]
@@ -94,8 +117,14 @@ def angle_of_two_unit_vectors(u1, u2, u3, v1, v2, v3, xyz):
 
     return deg
 
+############################
+##### calculation part #####
+############################
 df_labels = pd.DataFrame()
 df_deg_xyz = pd.DataFrame()
+df_time = pd.DataFrame()
+df_value = pd.DataFrame()
+df_back = pd.DataFrame()
 
 df_1 = pd.DataFrame()
 df_2 = pd.DataFrame()
@@ -133,6 +162,7 @@ for i in range(reader.point_labels.size):
     df_labels = df_labels.append(df_labels_loop)
 
 for i, points, analog in reader.read_frames():
+    time = ((i/120)*1)-(1/120)
     for f in range(reader.point_labels.size):
         # print('frame {}: point {}, analog {}'.format(points[f,0], points[f,1], points[f,2]))
         # print('frame {}: point {}, analog {}'.format(i, points.shape, analog.shape))
@@ -243,11 +273,16 @@ for i, points, analog in reader.read_frames():
             print("Hello World")
             break
 
+# df_value = df_deg_xyz[['xX FL/EXT', 'yY ROT', 'zZ L/R']].agg(['min','max'])
+
 # print(df_labels.iat[0,0])
 # print(unit_x)
 # print(type(unit_x))
 
-with pd.ExcelWriter('saved_merge.xlsx', engine='xlsxwriter') as writer1:
+###########################
+##### saved data part #####
+###########################
+with pd.ExcelWriter(path_save, engine='xlsxwriter') as writer1:
     df_1.to_excel(writer1, sheet_name = 'Raw Data', index = True)
     df_2.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol = 5)
     df_3.to_excel(writer1, sheet_name = 'Raw Data', index = None, startcol = 9)
